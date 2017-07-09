@@ -2,12 +2,10 @@ package nl.roelvandun.lib;
 
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
-
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 public class TheTest {
 
@@ -21,10 +19,31 @@ public class TheTest {
 		URL resource3 = Thread.currentThread().getContextClassLoader().getResource(filename);
 		URL resource4 = ClassLoader.getSystemClassLoader().getResource(filename);
 
-		assertThat(resource1, is(not(nullValue()))); //success
+//		assertThat(resource1, is(not(nullValue()))); //success
 //		assertThat(resource2, is(not(nullValue()))); //fails
 //		assertThat(resource3, is(not(nullValue()))); //fails
 //		assertThat(resource4, is(not(nullValue()))); //fails
 //		assertThat(resource5, is(not(nullValue()))); //fails
+
+		String bla = readFile(filename);
+	}
+
+	/**
+	 * Read file and put is into plain String
+	 **/
+	String readFile(String fileName) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		try {
+			StringBuilder sb = new StringBuilder();
+			String line = br.readLine();
+			while (line != null) {
+				sb.append(line);
+				sb.append("\n");
+				line = br.readLine();
+			}
+			return sb.toString();
+		} finally {
+			br.close();
+		}
 	}
 }
