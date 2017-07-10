@@ -2,48 +2,31 @@ package nl.roelvandun.lib;
 
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 
 public class TheTest {
 
 	@Test
 	public void name() throws Exception {
-		String filename = "/people.json";
+		String filename = "people.json"; // when you CMD+click the "people.json", it does open the resource file
 
-		URL resource1 = getClass().getResource(filename);
-		URL resource2 = getClass().getClassLoader().getResource(filename);
-		URL resource5 = TheTest.class.getClassLoader().getResource(filename);
-		URL resource3 = Thread.currentThread().getContextClassLoader().getResource(filename);
-		URL resource4 = ClassLoader.getSystemClassLoader().getResource(filename);
+		URL resource = getClass().getResource(filename);
 
-//		assertThat(resource1, is(not(nullValue()))); //success
-//		assertThat(resource2, is(not(nullValue()))); //fails
-//		assertThat(resource3, is(not(nullValue()))); //fails
-//		assertThat(resource4, is(not(nullValue()))); //fails
-//		assertThat(resource5, is(not(nullValue()))); //fails
+		System.out.println(resource);
 
-		String bla = readFile(filename);
+		String json = Files.lines(Paths.get(""))
+				.parallel()
+				.collect(Collectors.joining());
+
+		assertThat(resource, is(not(nullValue())));
 	}
 
-	/**
-	 * Read file and put is into plain String
-	 **/
-	String readFile(String fileName) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		try {
-			StringBuilder sb = new StringBuilder();
-			String line = br.readLine();
-			while (line != null) {
-				sb.append(line);
-				sb.append("\n");
-				line = br.readLine();
-			}
-			return sb.toString();
-		} finally {
-			br.close();
-		}
-	}
 }
